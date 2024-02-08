@@ -11,6 +11,7 @@ use App\Http\Controllers\ContentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WidgetController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ use App\Http\Controllers\TestController;
 */
 
 //dd(Auth::user());
-//Log::emergency('The system is down!');
+Log::emergency('The system is down!');
 
   Route::get('/', [PagesController::class, 'getHome']);
 
@@ -68,6 +69,8 @@ use App\Http\Controllers\TestController;
 
   Route::post('/product/create', [ProductController::class, 'create']);
 
-  Route::post('/search', [ContentController::class, 'search']);
+  Route::post('/contact/sendMail', [MailController::class, 'send']);
 
+  Route::post('/search', [ContentController::class, 'search']);
+ 
 require 'auth.php';

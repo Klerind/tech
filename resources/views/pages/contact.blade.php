@@ -4,7 +4,7 @@
  <div class="row">
    <div class="col-md-12">
      <h2>Contact Us</h2><hr>
-     <form action="" method="post">@csrf
+     <form action="/contact/sendMail" method="post">@csrf
        <div class="form-group">
          <label name="email">Email:</label>
          <input id="email" name="email" class="form-control">

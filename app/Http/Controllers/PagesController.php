@@ -13,6 +13,8 @@ use App\Http\Controllers\ContentController;
 use App\Http\Controllers\ScraperController;
 use App\Http\Controllers\ImagesController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 
 class PagesController extends Controller
 {
@@ -49,7 +51,7 @@ class PagesController extends Controller
   }
 
   public  function getAbout()
-  {
+  {  
      $data = ScraperController::show();
      return view('pages/about',[
        'data' => $data
@@ -58,6 +60,13 @@ class PagesController extends Controller
 
   public  function getContact()
   {
+  //  Mail::to('laravelmail@lara000.in')->send(new SendMail());
+    return view('pages/contact');
+  }
+
+  public  function sendMail()
+  {
+  //  Mail::to('laravelmail@lara000.in')->send(new SendMail());
     return view('pages/contact');
   }
 
