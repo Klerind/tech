@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/requestApi',[ProductController::class, 'update']);
 
 Route::get('/edit/comment',[CommentController::class, 'update']); 
+
+Route::get('/edit/user',[UserController::class, 'update']); 

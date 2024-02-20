@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Language>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Accountts>
  */
-class LanguageFactory extends Factory
+class AccounttsFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class LanguageFactory extends Factory
     public function definition()
     {
         return [
-             'title' => fake()->name(),
+             'accountt' => 'new seller',
         ];
     }
 }

@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserDescription extends Model
+class Roles extends Model
 {
     use HasFactory;
     
-     protected $table = 'user_descriptions';
+    protected $table = 'roles';
 
-    protected $primaryKey = 'user_description_id';
+    protected $primaryKey = 'role_id';
 
     protected $fillable = [
-      'user_id', 'user_description'
+      'role'
     ];
-    
 }

@@ -1,4 +1,4 @@
-<div class="container" style="margin-top: 12em;">
+<div class="container" style="margin-top: 6em;">
 <div class="row">
   <div class="col-md-12">
     @auth

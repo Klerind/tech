@@ -6,7 +6,7 @@
         min-width: 3em;
         max-width: 100%;
     }
-  .article{
+ .article{
   padding: 3em;
   margin: 1em;
   margin-left: 0;
@@ -71,15 +71,18 @@
     <span> 
       <b>added by: </b><?php echo '<a href="/show_user?user_id='.$content[$first_key_from_posts_item]->user->id.'" target="_blank">'.$content[$first_key_from_posts_item]->user->name.'</a>'; ?>
       <b>added: </b><?php echo $content[$first_key_from_posts_item]['created_at']->diffForHumans(); ?>
-    <br><span>Comments</span>
+    <?php if(!$content[$first_key_from_posts_item]->comment->isEmpty()){ ?>
+        <br><span>Comments:</br></span>
+    <?php } ?>
     <?php foreach ($content[$first_key_from_posts_item]->comment as $comment): ?>
       <?php if ($comment->user_id === auth()->id()): ?>
-        <span class="comment" canbeedit=true commentid="<?php echo $comment->comment_id; ?>">
+         <span class="comment" canbeedit=true commentid="<?php echo $comment->comment_id; ?>">
+          <?php echo $comment->comment.'</span>
+          <button onclick="editComment(event)" type="button" class="btn btn-warning">Edit comment</button></br>'; ?>
       <?php else: ?>
-        <span class="comment" canbeedit = false>
-      <?php endif; ?>
-      <?php echo $comment->comment.'</span>
-      <button onclick="editComment(event)" type="button" class="btn btn-warning">Edit comment</button></br>'; ?>
+       <span class="comment" canbeedit = false>
+          <?php echo $comment->comment.'</span>'; ?>    
+      <?php endif; ?> 
       <b>Added by: </b><?php echo '<a href="/show_user?user_id='.$comment->user_id.'" target="_blank">'.$comment->user->name.'</a>'; ?>
       <b>Added: </b><?php echo $comment->created_at->diffForHumans().'<br>'; ?>
     <?php endforeach; ?>

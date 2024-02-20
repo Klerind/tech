@@ -13,6 +13,7 @@ use App\Models\Address;
 use App\Models\UserDescription;
 use App\Models\LikedAccounts;
 use App\Models\Language; 
+use App\Models\Content; 
 
 class User extends Authenticatable
 {
@@ -77,4 +78,10 @@ class User extends Authenticatable
     {
       return $this->hasMany(Language::class, 'user_id', 'id');
     }
+    
+    public function contents()
+    { 
+       return $this->hasMany(Content::class, 'user_id', 'id');
+    }
+    
 }
