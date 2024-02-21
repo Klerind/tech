@@ -43,12 +43,12 @@
            <div>
             <?php if(!is_null($user->role)){ ?>
               <?php foreach($user->role as $role ) { ?>
-                 <span class="badge badge-danger"><?php echo $role->user_role; ?></span>  
+                 <span class="badge badge-danger"><?php echo $role->roleName->role; ?></span>  
               <?php } ?> 
             <?php } ?>
             <?php if(!is_null($user->status)){ ?>  
               <?php foreach($user->status as $status) { ?>
-               <span class="badge badge-secondary"><?php echo $status->user_status; ?></span>
+               <span class="badge badge-secondary"><?php echo $status->statusName->status; ?></span>
               <?php } ?> 
             <?php } ?> 
                <span class="btn btn-warning" data-toggle="modal"
@@ -103,7 +103,7 @@
           <p><?php echo $user->description->user_description; ?></p>  
          </article>  
         <?php } ?>
-            <p><?php  foreach ($user->contents as $key => $item)
+            <p><?php foreach ($user->contents as $key => $item)
                     {
                      $contents[$item['content_link']][$key] = $item; //dump($item['content_link']);
                     }  
@@ -176,7 +176,7 @@
  </div>
 </div>
 </div><!--end of container-->
- 
+   
 <div class="modal fade" id="editUser" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -192,14 +192,14 @@
              <input type="text" name="user_name" value="<?php echo $user->name; ?>" />  
              <br/>User image: 
              <input type="file" name="user_image" value="<?php echo $user->name; ?>" /> 
-             <br/>User roles: 
+             <br/>User roles:  
              <?php foreach($user->role as $role){ ?>
-             <?php echo $role->user_role.','; ?>
-             <?php } ?>
-              
+                <input type="checkbox" id="scales" name="<?php echo $role->roleName->role; ?>" checked />
+                <label for="scales"> <?php echo $role->roleName->role.','; ?></label>
+             <?php } ?>  
               <br/>User status: 
              <?php foreach($user->status as $status){ ?>
-             <?php echo $status->user_status.','; ?>
+             <?php echo $status->statusName->status.','; ?>
              <?php } ?>
              <br/>About me:
              <textarea id="w3review" name="user_description"> 
@@ -271,12 +271,12 @@
     let formdata = {
        "user_id": '<?php echo $user->id; ?>',
 	   "user_name": form.user_name.value, 
-	   "user_statuses": 2,
-       "user_roles": 2,
+	   "user_statuses": [1,2,3],
+       "user_roles": [1,2,3],
        "user_description": form.user_description.value,  
 	   "user_address": form.user_address.value,
-       "languages": 2,
-       "liked_accounts": 2
+       "languages": [2],
+       "liked_accounts": [2]
 	}
     console.log(formdata)
     //editThis.setAttribute('contenteditable', false)
