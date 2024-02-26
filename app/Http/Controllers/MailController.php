@@ -11,7 +11,7 @@ class MailController extends Controller
   public static function send(Request $request)
   {
       //dd($request)
-    Mail::to('klerindtervoli@klerindtervoli.tech')->send(new SendMail($request));
+    Mail::to('laravelmail@lara000.in')->send(new SendMail($request));
       //  ->later(now()->addMinutes(10), new SendMail($request));
     return view('pages/contact');
   }

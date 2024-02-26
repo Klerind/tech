@@ -38,7 +38,7 @@
            <div class="left">
                <span class="user_image"><img width="38" src=" <?php echo asset('albill.png'); ?>" alt="image" /></span>
            </div>
-           <div class="right">
+           <div class="right">na
                <div><span><?php echo $user->name; ?>&nbsp;@<?php echo str_replace(' ', '', $user->name); ?></span></div>
            <div>
             <?php if(!is_null($user->role)){ ?>
@@ -51,15 +51,15 @@
                <span class="badge badge-secondary"><?php echo $status->statusName->status; ?></span>
               <?php } ?> 
             <?php } ?> 
-               <span class="btn btn-warning" data-toggle="modal"
+        <span class="btn btn-warning" data-toggle="modal"
             data-target="#editUser"><?php echo 'Edit User'; ?></span>
-                <button
+        <button
             type="button"
             class="btn btn-primary"
             data-toggle="modal"
             data-target="#createWidget">
             Create widget
-     </button>
+        </button>
            </div> 
            </div> 
        </article>
