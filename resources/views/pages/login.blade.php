@@ -1,9 +1,9 @@
 @include('partials._head')
 @include('partials._menu')
- <div class="container" style="margin-top: 12em;">
+ <div class="container" style="margin-top: 3em;">
  <div class="row">
    <div class="col-md-12">
-     <h2>Login In</h2>
+     
      <section class="vh-100 gradient-custom">
      <div class="container py-5 h-100">
        <div class="row d-flex justify-content-center align-items-center h-100">

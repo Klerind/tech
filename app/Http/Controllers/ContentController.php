@@ -10,7 +10,7 @@ class ContentController extends Controller
 {
   public static function create(Request $request)
   {
-    $inputs = $request->input();
+    $inputs = $request->input();  
     if (!is_null($request->file('image')))
     {
       $imgOriginName = $request->file('image')->getClientOriginalName();
@@ -71,7 +71,7 @@ class ContentController extends Controller
   }
 
   public static function show()
-  {
+  { 
     $fields = $field_group_post = $field_group_product = [];
     $fields_content = Content::select('*')
         ->where(['user_id' => auth()->id()])
@@ -95,6 +95,33 @@ class ContentController extends Controller
 
     return $fields;
   }
+  
+  public static function showArticle(Request $request)
+  {  
+    $content_link_id = $request->input()['content_link'];
+    $fields = $field_group_post = $field_group_product = [];
+    $fields_content = Content::select('*')
+        ->where(['content_link' => $content_link_id])
+      //  ->whereIn('field_id', $field_id)
+      //  ->orderBy('field_id', 'asc')
+        ->get();
+
+    foreach ($fields_content as $field_content)
+    {
+        if ($field_content['field_group'] === 1)
+        {
+          $field_group_post[] =  $field_content;
+        }elseif ($field_content['field_group'] === 2)
+        {
+          $field_group_product[] =  $field_content;
+        }
+    }
+    $fields['fields_content'] = $fields_content; 
+     
+    return view('pages/article',[
+           'contents' => $fields_content
+    ]); 
+  } 
 
   public static function delete($content_id)
   {

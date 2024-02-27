@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Attachment;
 
 class SendMail extends Mailable
 {
@@ -22,10 +23,10 @@ class SendMail extends Mailable
     public $request = null;
 
     public function __construct(
-      public $request
-    )
+            $request 
+            )
     {
-      $this->request = $request;
+      $this->request = $request; 
     }
 
     /**
@@ -36,11 +37,14 @@ class SendMail extends Mailable
     public function envelope()
     {
         $request = $this->request->input();
-
+      
         return new Envelope(
-           subject: $request['subject'],
-           //from: $request['email']
+           subject: $request['subject'], 
+           replyTo: [
+                new Address($request['email'], 'Taylor Otwell'),
+                ],
         );
+        
     }
 
     /**
@@ -61,7 +65,9 @@ class SendMail extends Mailable
      * @return array
      */
     public function attachments()
-    {
-        return [];
+    { //dd(fromStorage('laravel/public/albill.png'));
+        return [
+            Attachment::fromStorage('iindex.jpeg')
+        ];
     }
 }

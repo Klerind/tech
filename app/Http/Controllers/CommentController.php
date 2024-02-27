@@ -22,9 +22,22 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create(Request $request)
+    { 
+        $comment = $request->input(); 
+        if (auth()->id() == null)
+        { 
+          return redirect('/article?content_link='.$comment['content_link'])
+                         ->with('status', 'You can not add a comment. Please sing up first!');
+        }
+
+        Comment::create([
+          'user_id' => auth()->id(),
+          'content_link' => $comment['content_link'],
+          'comment' => $comment['comment']
+        ]);
+
+        return redirect('/article?content_link='.$comment['content_link']);
     }
 
     /**
@@ -34,9 +47,8 @@ class CommentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $comment = $request->input();
-        //dd($comment);
+    {  
+        $comment = $request->input(); 
         if (auth()->id() == null)
         {
           return redirect('/')->with('status', 'You can not add a comment. Please sing up first!');

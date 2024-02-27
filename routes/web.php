@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WidgetController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,7 @@ use App\Http\Controllers\MailController;
 */
 
 //dd(Auth::user());
-Log::emergency('The system is down!');
+//Log::emergency('The system is down!');
 
   Route::get('/', [PagesController::class, 'getHome']);
 
@@ -62,10 +63,16 @@ Log::emergency('The system is down!');
   Route::get('/profile/deleteWidget', [WidgetController::class, 'delete']);
 
   Route::get('/post/delete', [PostController::class, 'delete']);
+  
+  Route::get('/show_user', [UserController::class, 'show']);
+  
+  Route::get('/article', [ContentController::class, 'showArticle']);
 
   Route::post('/post/create', [PostController::class, 'create']);
 
-  Route::post('/comments/add', [CommentController::class, 'store']);
+  Route::post('/comments/create', [CommentController::class, 'create']);
+   
+  Route::post('/comments/store', [CommentController::class, 'store']);
 
   Route::post('/product/create', [ProductController::class, 'create']);
 

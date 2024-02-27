@@ -9,7 +9,7 @@
  </div>
 </div>
 </div><!--end of container-->
-<?php echo $data; ?>
+<?php //echo $data; ?>
 <img src="<?php //echo storage_path().'/app/index.jpeg'; ?>" alt="">
 @yield('content')
    <!-- Optional JavaScript -->

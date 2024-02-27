@@ -1,5 +1,11 @@
   @include('partials._head')
   @include('partials._menu')
+  <style>
+    img{
+       min-width: 3em;
+       max-width: 100%;
+    }
+  </style>
  <div class="container" style="margin-top: 12em;">
  <div class="row">
    <div class="col-md-12">
@@ -9,8 +15,8 @@
          <?php $first_key_from_content = array_key_first($all_content->toArray()); ?>
            <?php foreach ($all_content as $value): ?>
            <?php if ($value->field_id == 28): ?>
-             <?php   $imageUrl = asset($value['content']); ?>
-             <?php echo '<img width="90" src="'. $imageUrl .'" alt="image"><br>'; ?>
+             <?php   $imageUrl = asset('laravel/public/'.$value['content']); ?>
+             <?php echo '<img src="'. $imageUrl .'" alt="image"><br>'; ?>
            <?php elseif ($value->field_id == 53): ?>
              <?php echo $value->field->name.": <span style='background-color:".$value->content.";padding:.3em 1em;'></span><br>"; ?>
            <?php else: ?>
@@ -43,7 +49,7 @@
            <b>Added: </b><?php echo $comment->created_at->diffForHumans().'<br>'; ?>
          <?php endforeach; ?>
         </span>
-        <form action="/comments/add" method="post">@csrf
+        <form action="/comments/store" method="post">@csrf
           @error('title')
                   {{ $title }}
           @enderror

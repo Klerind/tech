@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e)
-        {
+        {  
           $information_log = new InformationLog();
           $information_log->information_log = $e;
           $information_log->saveQuietly();

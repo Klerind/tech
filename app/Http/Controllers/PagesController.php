@@ -41,13 +41,14 @@ class PagesController extends Controller
     }
 
     //ksort($products, SORT_NUMERIC);
-
+   // dd($fields_content['contents']);
     return view('pages/welcome',[
            'fields' => $fields,
            'contents' => $fields_content['contents'],
            'posts' => $posts,
            'products' => $products
     ]);
+
   }
 
   public  function getAbout()
@@ -129,10 +130,10 @@ class PagesController extends Controller
 
    public function imagesUpload(Request $request)
    {
-  //   dd($request->file('image')->getClientOriginalName());
+     dd($request->file('image')->getClientOriginalName());
      $imgOriginName = $request->file('image')->getClientOriginalName();
      ImagesController::store($imgOriginName);
-     $request->image->move(public_path(''), $imgOriginName);
+     $request->image->move(public_path('public_html'), $imgOriginName);
      return redirect('/profile');
    }
 

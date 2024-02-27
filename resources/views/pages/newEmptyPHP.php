@@ -1,1 +1,3 @@
-<?php echo "sendi mail";
+<?php echo "sendi mail ";
+$request = $request->input();
+echo $request['message'];

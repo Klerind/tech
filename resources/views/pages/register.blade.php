@@ -1,9 +1,8 @@
 @include('partials._head')
 @include('partials._menu')
- <div class="container" style="margin-top: 12em;">
+ <div class="container" style="margin-top: 6em;">
  <div class="row">
-   <div class="col-md-12">
-     <h2>Signup</h2>
+   <div class="col-md-12"> 
      <section class="vh-100 bg-image"
   style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
   <div class="mask d-flex align-items-center h-100 gradient-custom-3">
@@ -12,8 +11,7 @@
         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">
-              <h2 class="text-uppercase text-center mb-5">Create an account</h2>
-
+              <h2 class="text-uppercase text-center mb-5">Create an account</h2> 
               <form action="/" method="post">@csrf
                 <div class="form-outline mb-4">
                   <input type="text" id="form3Example1cg" class="form-control form-control-lg" name="name" />

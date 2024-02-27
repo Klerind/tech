@@ -15,7 +15,7 @@
         <a
            href='/test'
            type="button"
-           class="btn btn-primary">
+           class="btn btn-primary invisible">
            Create Test
         </a>
      <button
@@ -129,7 +129,7 @@
          <?php //dd($item); ?>
         <?php $contents_id .= $item['content_id'].','; ?>
         <?php if ($item->field_id == 28): ?>
-          <?php   $imageUrl = asset($item['content']); ?>
+          <?php   $imageUrl = asset('laravel/public/'.$item['content']); ?>
           <td><?php echo '<img width="90" src="'. $imageUrl .'" alt="image"> '; ?></td>
         <?php elseif ($item->field_id == 53): ?>
           <td><?php echo "<span style='background-color:".$item->content.";padding:.3em 1em;'></span>"; ?></td>
