@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php 
 header('Access-Control-Allow-Origin: http://localhost:3000');
 use Illuminate\Contracts\Http\Kernel;
@@ -53,3 +54,21 @@ $response = $kernel->handle(
 )->send();
 
 $kernel->terminate($request, $response);
+=======
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edit this template
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <?php
+        // put your code here
+        ?>
+    </body>
+</html>
+>>>>>>> 31527f983e0936b6d473cfd06fa61aea3217a264
