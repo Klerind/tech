@@ -92,13 +92,8 @@ return [
     */
 
     'from' => [
-<<<<<<< HEAD
         'address' => env('MAIL_FROM_ADDRESS', 'klerindtervoli@klerindtervoli.tech'),
         'name' => env('MAIL_FROM_NAME', 'laravel'),
-=======
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
->>>>>>> origin/master
     ],
 
     /*

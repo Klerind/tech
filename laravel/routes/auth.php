@@ -22,7 +22,7 @@ Route::middleware('guest')->get('/user', function (Request $request)
     return $request->user();
 });
 
-Route::post('/', function (Request $request)
+Route::post('/t', function (Request $request)
 {
    $request = $request->input();
    $user = RegisterController::create($request);

@@ -25,7 +25,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-dd(Auth::user());
+//dd(Auth::user());
 //Log::emergency('The system is down!');
 
   Route::get('/', [PagesController::class, 'getHome']);
