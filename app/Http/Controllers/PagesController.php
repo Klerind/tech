@@ -20,7 +20,7 @@ class PagesController extends Controller
 {
 
   public function getHome()
-  {
+  {dd(9);
     $fields = UserFormFieldController::show();
     $fields_content = ContentController::getContentsForHomePage();
 
