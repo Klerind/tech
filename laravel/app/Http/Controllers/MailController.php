@@ -10,14 +10,9 @@ class MailController extends Controller
 {
   public static function send(Request $request)
   {
-<<<<<<< HEAD
       //dd($request)
     Mail::to('laravelmail@lara000.in')->send(new SendMail($request));
       //  ->later(now()->addMinutes(10), new SendMail($request));
-=======
-    //dd($request);
-    Mail::to('laravelmail@lara000.in')->send(new SendMail($request));
->>>>>>> origin/master
     return view('pages/contact');
   }
 }

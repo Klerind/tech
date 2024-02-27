@@ -17,10 +17,7 @@ class ImagesController extends Controller
 
   public static function store($imgOriginName)
   {
-<<<<<<< HEAD
       dd($imgOriginName);
-=======
->>>>>>> origin/master
     Images::create([
      'user_id' => auth()->id(),
      'url' => $imgOriginName

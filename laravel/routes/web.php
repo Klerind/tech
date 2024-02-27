@@ -12,7 +12,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WidgetController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\MailController;
-<<<<<<< HEAD
 use App\Http\Controllers\UserController;
 
 /*
@@ -26,7 +25,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-//dd(Auth::user());
+dd(Auth::user());
 //Log::emergency('The system is down!');
 
   Route::get('/', [PagesController::class, 'getHome']);
@@ -74,62 +73,6 @@ use App\Http\Controllers\UserController;
   Route::post('/comments/create', [CommentController::class, 'create']);
    
   Route::post('/comments/store', [CommentController::class, 'store']);
-=======
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-//dd(Auth::user());
-Log::emergency('The system is down!');
-
-  Route::get('/', [PagesController::class, 'getHome']);
-
-  Route::get('/about', [PagesController::class, 'getAbout']);
-
-  Route::get('/contact', [PagesController::class, 'getContact']);
-
-  Route::get('/login', function ()
-  {
-      return view('pages/login');
-  })->middleware('guest');
-
-  Route::get('/register', function ()
-  {
-      return view('pages/register');
-  })->middleware('guest');
-
-  Route::get('/profile', [PagesController::class, 'getProfilePage']);
-
-  Route::get('/test', [TestController::class, 'show']);
-
-  Route::get('/test/result', [TestController::class, 'add']);
-
-  Route::post('/profile/create/content', [PagesController::class, 'createContent']);
-
-  Route::post('/profile/createArticleForm', [PagesController::class, 'createArticleForm']);
-
-  Route::post('/profile/imagesUpload', [PagesController::class, 'imagesUpload']);
-
-  Route::get('/post/edit', [PostController::class, 'edit']);
-
-  Route::get('/profile/createWidget', [WidgetController::class, 'create']);
-
-  Route::get('/profile/deleteWidget', [WidgetController::class, 'delete']);
-
-  Route::get('/post/delete', [PostController::class, 'delete']);
-
-  Route::post('/post/create', [PostController::class, 'create']);
-
-  Route::post('/comments/add', [CommentController::class, 'store']);
->>>>>>> origin/master
 
   Route::post('/product/create', [ProductController::class, 'create']);
 
