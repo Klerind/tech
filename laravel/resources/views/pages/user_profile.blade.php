@@ -28,6 +28,36 @@
             margin-left: 1em;     
             }    
      </style>
+ <script type="text/javascript">
+    let user = <?php echo json_encode($user); ?> 
+    let thisComment = null
+    let canBeEdit = null
+    let editThis = null
+    let rolesId = []
+    let statusId = []
+    let languagesId = []
+    let linked_accountsId = []
+    let newrolesName = []
+    let newstatusesName = []
+    let newlanguagesName = []
+    let newlinked_accountsName = []
+     
+    let formdata = {
+       "user_id": '<?php echo $user->id; ?>',
+	   "user_name": null, 
+       "user_roles": rolesId,  
+       "new_user_roles": newrolesName,   
+	   "user_statuses": statusId,
+       "new_user_statuses": newstatusesName,  
+       "user_languages": languagesId,
+       "new_user_languages": newlanguagesName,  
+       "user_linked_accounts": linked_accountsId,
+       "new_user_linked_accounts": newlinked_accountsName,  
+       "user_description": null,  
+	   "user_address": null,
+	}
+    
+ </script>
  <div class="container" style="margin-top: 12em;">
  <div class="row">
    <div class="col-md-12"> 
@@ -38,22 +68,23 @@
            <div class="left">
                <span class="user_image"><img width="38" src=" <?php echo asset('albill.png'); ?>" alt="image" /></span>
            </div>
-           <div class="right">na
+           <div class="right">  
                <div><span><?php echo $user->name; ?>&nbsp;@<?php echo str_replace(' ', '', $user->name); ?></span></div>
            <div>
-            <?php if(!is_null($user->role)){ ?>
-              <?php foreach($user->role as $role ) { ?>
+            <?php if($user->roles->isNotEmpty()){ ?>
+              <?php foreach($user->roles as $role ) { ?>
                  <span class="badge badge-danger"><?php echo $role->roleName->role; ?></span>  
               <?php } ?> 
             <?php } ?>
-            <?php if(!is_null($user->status)){ ?>  
+            <?php if($user->status->isNotEmpty()){ ?>  
               <?php foreach($user->status as $status) { ?>
                <span class="badge badge-secondary"><?php echo $status->statusName->status; ?></span>
               <?php } ?> 
             <?php } ?> 
         <span class="btn btn-warning" data-toggle="modal"
             data-target="#editUser"><?php echo 'Edit User'; ?></span>
-        <button
+        <button 
+            style="display:none;"
             type="button"
             class="btn btn-primary"
             data-toggle="modal"
@@ -68,29 +99,29 @@
     </div>
     <div class="container text-left">
       <div class="row align-items-start">
-       <div class="col-md-4"> <?php //dd($user->role); ?>
+       <div class="col-md-4"> 
          <article> 
             <?php if(!is_null($user->address)){ ?>
               <p><?php echo $user->address->address; ?></p>
             <?php } ?>
-            <p><?php echo 'Member since '.$user->created_at->isoFormat('MMM Do YYYY'); ?></p>
+            <p><?php echo is_null($user->created_at) ? 'Member since: unknown date' : 'Member since: '. $user->created_at->isoFormat('MMM Do YYYY'); ?></p>
          </article>
-        <?php if(!is_null($user->language)){ ?> 
+        <?php if($user->languages->isNotEmpty()){ ?> 
          <article>
           <b>Languages</b>
           <ul>
-          <?php foreach($user->language as $language ) { ?>
-            <?php echo '<li>'.$language->language.'</li>'; ?>
+          <?php foreach($user->languages as $language ) {  //dd();?>
+            <?php echo '<li>'.$language->languageName->language.'</li>'; ?>
           <?php } ?>
            </ul>
          </article>
         <?php } ?>
-        <?php if(!empty($user->linkedAccount)){ ?> 
+        <?php if($user->linkedAccounts->isNotEmpty()) { ?> 
          <article>
            <b>Linked accounts</b>
            <ul>
-           <?php foreach($user->linkedAccount as $linkedAccount) { ?>
-             <?php echo '<li>'.$linkedAccount->liked_account.'</li>'; ?>
+           <?php foreach($user->linkedAccounts as $linkedAccount) { ?>
+             <?php echo '<li>'.$linkedAccount->accountName->account.'</li>'; ?>
            <?php } ?>
            </ul> 
          </article>
@@ -155,10 +186,14 @@
           <b>Added: </b><?php echo $comment->created_at->diffForHumans().'<br>'; ?>
           <?php endforeach; ?>
           </span>
-          <form action="/comments/store" method="post">@csrf
-           
+          <form action="/comments/store" method="post">@csrf  
            <input type="hidden" name="content_link" value="<?php echo $key; ?>" />
-           <div class="form-outline mb-4">
+          <div class="form-outline mb-4">
+           @error('comment')
+             <div class="alert alert-danger" role="alert">
+               {{ $message }}
+             </div>
+           @enderror
            <input type="text" id="form3Example1cg" class="form-control form-control-lg" name="comment" placeholder="Be the first to add a comment" />
           </div>
          <div class="d-flex justify-content-center">
@@ -186,35 +221,62 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="/profile/createArticleForm" method="post">  @csrf
-         <div class="modal-body">  
-             User name: 
-             <input type="text" name="user_name" value="<?php echo $user->name; ?>" />  
-             <br/>User image: 
-             <input type="file" name="user_image" value="<?php echo $user->name; ?>" /> 
-             <br/>User roles:  
-             <?php foreach($user->role as $role){ ?>
-                <input type="checkbox" id="scales" name="<?php echo $role->roleName->role; ?>" checked />
-                <label for="scales"> <?php echo $role->roleName->role.','; ?></label>
-             <?php } ?>  
-              <br/>User status: 
-             <?php foreach($user->status as $status){ ?>
-             <?php echo $status->statusName->status.','; ?>
+        <form> 
+         <div class="modal-body">    
+            <div id="user_status" role="alert"></div>   
+            <div id="user_name" role="alert"></div> 
+            User name:  
+            <input type="text" name="user_name" value="<?php echo $user->name; ?>" />  
+            <br/>User image: 
+            <input type="file" name="user_image" value="<?php echo $user->name; ?>" /> 
+             
+             
+            <div id="user_address" role="alert"></div>    
+            <br/>User address:
+            <input type="text" name="user_address" value="<?php echo $user->address->address ?? null; ?>" />  
+            
+            <div id="user_description" role="alert"></div> 
+            <br/>About me:   
+            <textarea name="user_description"> 
+               <?php echo $user->description->user_description ?? null; ?>
+            </textarea> 
+             
+                <br/>User roles:  
+             <?php foreach($user->roles as $role){ ?> 
+                <input onclick="setCheckBox(this)" type="checkbox" name="role" value="<?php echo $role->role_id; ?>" checked />
+                <label for="scales"> <?php echo $role->roleName->role; ?></label>
+             <?php }  ?>   
+              <input type="text" name="add_role" placeholder="add role" />  
+              <span class="btn btn-warning" onclick="addRole(this)">Add Role</span>
+                            
+                <br/>User status: 
+             <?php foreach($user->status as $status){ ?> 
+                <input onclick="setCheckBox(this)" type="checkbox" name="status" value="<?php echo $status->status_id; ?>" checked />
+                <label for="scales"> <?php echo $status->statusName->status; ?></label> 
              <?php } ?>
-             <br/>About me:
-             <textarea id="w3review" name="user_description"> 
-               <?php echo $user->description->user_description ?? null ; ?>
-             </textarea> 
-             <br/>User address:
-             <input type="text" name="user_address" value="<?php echo $user->address->address ?? null ; ?>" />  
+              <input type="text" name="add_status" placeholder="add status" />  
+              <span class="btn btn-warning" onclick="addStatus(this)">Add Status</span> 
+              
+                <br/>User languages: 
+              <?php foreach($user->languages as $language){ ?> 
+                <input onclick="setCheckBox(this)" type="checkbox" name="language" value="<?php echo $language->language_id; ?>" checked />
+                <label for="scales"> <?php echo $language->languageName->language; ?></label> 
+             <?php } ?>
+              <input type="text" name="add_status" placeholder="add status" />  
+              <span class="btn btn-warning" onclick="addLanguage(this)">Add Language</span> 
+              
+                <br/>User linked accounts:  
+              <?php foreach($user->linkedAccounts as $linkedAccount){ ?> 
+                <input onclick="setCheckBox(this)" type="checkbox" name="linked_account" value="<?php echo $linkedAccount->liked_account_id; ?>" checked />
+                <label for="scales"> <?php echo $linkedAccount->accountName->account; ?></label> 
+             <?php } ?>
+              <input type="text" name="add_status" placeholder="add status" />  
+              <span class="btn btn-warning" onclick="addLinkedAccount(this)">Add Linked Account</span> 
+               
          </div>
          <div class="modal-footer">
-           <a
-              href="/profile/deleteWidget?widget_id=<?php //echo $widget->widget_id; ?>"
-              class="btn btn-danger">Delete <?php //echo $widget->name. ' Widget'; ?>
-           </a>
            <button type="button" onclick="editUser(event)" class="btn btn-primary">Save changes</button>
-           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-label="Close">Close</button>
          </div>
         </form>
       </div>
@@ -223,8 +285,9 @@
 
 <img src="<?php //echo storage_path().'/app/index.jpeg'; ?>" alt="">
 @yield('content')
-<script type="text/javascript">
-  let thisComment = canBeEdit = editThis = null
+
+<script type="text/javascript">  
+   
   function editComment(event)
   {
     thisComment = event.target
@@ -260,43 +323,232 @@
     getSendAjaxRequest('/edit/comment', row, getData)
   }
   
-  
-    let user_id = '<?php echo $user->name; ?>'
+  function addInput()
+  {
+    let input = document.createElement('input')
     
-  function editUser(event)
-  {  
-      console.log(event.target.form)
-       
-    let form = event.target.form
-    let formdata = {
-       "user_id": '<?php echo $user->id; ?>',
-	   "user_name": form.user_name.value, 
-	   "user_statuses": [1,2,3],
-       "user_roles": [1,2,3],
-       "user_description": form.user_description.value,  
-	   "user_address": form.user_address.value,
-       "languages": [2],
-       "liked_accounts": [2]
-	}
-    console.log(formdata)
-    //editThis.setAttribute('contenteditable', false)
-    //editThis.style.border = "none"
-   // thisComment.setAttribute('onclick', 'editComment(event)')
-
-   // let content_id = editThis.attributes.commentid.value
-   // let row = []
-   // row[editThis.attributes.commentid.value] = editThis.textContent.trim()
-   
-    formdata = JSON.stringify(formdata)
-
-    function getData(data)
-    {
-      console.log(data.response);
-    }
-
-    getSendAjaxRequest('/edit/user', formdata, getData)
+    input.setAttribute('onclick','removeKeyWord(this)')
+    input.setAttribute('type','checkbox')
+    input.setAttribute('name','')
+    input.setAttribute('checked','true')
+    
+    return input
   }
 
+  function addLabel(event)
+  {
+    
+    let label = document.createElement('label')
+    
+    label.setAttribute('for','scales') 
+    label.textContent = event.previousElementSibling.value
+    
+    return label
+  }
+    
+    
+  function setIds(event, ids)
+  {
+      if(event.checked === false)
+      {
+          if(!ids.includes(event.value))
+          {  
+            ids.push(event.value)
+          } 
+          
+      }
+      
+      if(event.checked === true)
+      {  
+          if(ids.includes(event.value))
+          { 
+            ids.filter(element => element !== event.value) 
+          } 
+          
+      }
+  } 
+  
+  function setCheckBox(event)
+  { 
+                
+      if(event.checked === false)
+      {
+          if(event.name === 'role')
+          { 
+           setIds(event, rolesId) 
+          } 
+          
+          if(event.name === 'status')
+          { 
+           setIds(event, statusId)
+          }
+          
+          if(event.name === 'language')
+          { 
+           setIds(event, languagesId)
+          }
+          
+          if(event.name === 'linked_account')
+          { 
+           setIds(event, linked_accountsId)
+          }
+      }
+      
+      if(event.checked === true)
+      {  
+          if(event.name === 'role')
+          { 
+           setIds(event, rolesId) 
+          } 
+          
+          if(event.name === 'status')
+          { 
+           setIds(event, statusId)
+          } 
+          
+          if(event.name === 'language')
+          { 
+           setIds(event, languagesId) 
+          } 
+          
+          if(event.name === 'linked_account')
+          { 
+           setIds(event, linked_accountsId)  
+          } 
+           
+      }  
+  }
+
+  function removeKeyWord(event)
+  { 
+    let name = event.nextElementSibling.textContent.slice(0, -1)
+      
+    if(event.name === 'role')
+    { 
+       newrolesName.filter(element => element !== name) 
+    } 
+          
+    if(event.name === 'status')
+    { 
+       newstatusName.filter(element => element !== name) 
+    } 
+          
+    if(event.name === 'language')
+    { 
+       newlanguagesName.filter(element => element !== name) 
+    } 
+          
+    if(event.name === 'linked_account')
+    { 
+        newlinked_accountsName.filter(element => element !== name) 
+    } 
+      
+  }
+  
+  function addKeyWord(event, listOfNames)
+  { 
+      
+    let input = addInput()  
+    
+    let label = addLabel(event)  
+    
+    event.previousElementSibling.parentElement.insertBefore(input, event.previousElementSibling)
+    event.previousElementSibling.parentElement.insertBefore(label, event.previousElementSibling)
+    
+    listOfNames.push(event.previousElementSibling.value) 
+  }
+
+  function addRole(event)
+  { 
+      addKeyWord(event, newrolesName) 
+  }
+  
+  function addStatus(event)
+  { 
+      addKeyWord(event, newstatusesName)  
+  } 
+  
+  function addLanguage(event)
+  {  
+      addKeyWord(event, newlanguagesName)  
+  }
+    
+  function addLinkedAccount(event)
+  { 
+      addKeyWord(event, newlinked_accountsName) 
+  }
+  
+  function editUser(event)
+  {   
+       
+    let form = event.target.form
+    
+	formdata.user_name = form.user_name.value.trim()  
+    formdata.user_description = form.user_description.value.trim()
+	formdata.user_address = form.user_address.value.trim()   
+       
+    willBeSendFormData = JSON.stringify(formdata)
+    
+    console.log(formdata)
+    
+    function getData(data)
+    { 
+      
+      errors_response = JSON.parse(data.response) 
+  
+      let user_name = document.getElementById('user_name')
+      
+      if(errors_response.user_name)
+      { 
+        user_name.className = 'alert alert-danger'
+        user_name.innerHTML = errors_response.user_name 
+      }else
+      {
+        user_name.className = ''
+        user_name.innerHTML = ''
+      }
+ 
+      let user_description = document.getElementById('user_description')
+ 
+      if(errors_response.user_description)
+      { 
+        user_description.className = 'alert alert-danger'
+        user_description.innerHTML = errors_response.user_description 
+      }else
+      {
+        user_description.className = ''
+        user_description.innerHTML = ''
+      }
+      
+      let user_address = document.getElementById('user_address')
+      
+      if(errors_response.user_address)
+      { 
+        user_address.className = 'alert alert-danger'
+        user_address.innerHTML = errors_response.user_address 
+      }else
+      {
+        user_address.className = ''
+        user_address.innerHTML = ''
+      } 
+      
+      let user_status = document.getElementById('user_status')
+      
+      if(errors_response.user_status)
+      { 
+        user_status.className = 'alert alert-info'
+        user_status.innerHTML = errors_response.user_status 
+      }else
+      {
+        user_status.className = ''
+        user_status.innerHTML = ''
+      } 
+      
+    }
+
+    getSendAjaxRequest('/edit/user', willBeSendFormData, getData)
+  } 
+  
 </script>
    <!-- Optional JavaScript -->
    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -328,7 +580,7 @@ function getSendAjaxRequest(url,data,getData) {
         getData(this);
      }
    }
-   request.open("GET",url+"?data="+data,true);
+   request.open("POST",url+"?data="+data,true);
    request.send();
 }
 </script>

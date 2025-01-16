@@ -11,7 +11,20 @@
  <div class="container-fluid" style="margin-top: 12em;">
  <div class="row">
    <div class="col-md-12">
-        <h2>Profile</h2>
+    <h2>Profile</h2>
+    
+    <?php if (session()->get('status') != null): ?>
+     <div class="alert alert-success" role="alert">
+       <?php echo session()->get('status'); ?>
+     </div>
+    <?php endif; ?>
+    
+    <?php if (session()->get('success') != null): ?>
+     <div class="alert alert-success" role="alert">
+       <?php echo session()->get('success'); ?>
+     </div>
+    <?php endif; ?>
+    
         <a
            href='/test'
            type="button"
@@ -48,15 +61,31 @@
 <div class="container">
  <div class="row">
    <div class="col-md-12">
-<?php foreach ($widgets as $widget): ?>
+   
+<?php foreach ($widgets as $widget) { ?>
  <div class="article">
   <p>Add <?php echo $widget->name; ?></p>
   <form action="/profile/create/content" method="post" enctype="multipart/form-data">@csrf
     <input type="hidden" name="field_group" value="<?php echo $widget->field_group_id; ?>">
-  <?php foreach ($fields['fields'] as $field): ?>
-   <?php if ($widget->field_group_id === $field->field_group_id): ?>
+  <?php //dd($fields['fields']); 
+  foreach ($fields['fields'] as $field) { ?> 
+    
+   <?php if ($widget->field_group_id === $field->field_group_id) { ?>
      <div class="form-outline mb-4">
-       <?php if ($field->fieldType->type == 'file'): ?>
+       <?php if($errors->isNotEmpty())
+       {      
+         foreach($errors->messages() as $key => $error)
+         {             
+             if($key === $field->field->name)
+             {  
+              echo '<div class="alert alert-danger" role="alert">';
+              echo $error[0];
+              echo '</div>'; 
+             }
+         }  
+         
+       }  ?>
+       <?php if ($field->fieldType->type == 'file') { ?>
         <input
               type="<?php echo $field->fieldType->type; ?>"
               class="form-control form-control-lg"
@@ -65,20 +94,20 @@
               type="hidden"
               class="form-control form-control-lg"
               name="<?php echo $field->field->field_id; ?>" value=""/>
-       <?php else: ?>
+       <?php } else { ?>
         <input
               type="<?php echo $field->fieldType->type; ?>"
               class="form-control form-control-lg"
               name="<?php echo $field->field->field_id; ?>" />
-       <?php endif; ?>
+       <?php } ?>
        <label
             class="form-label"
             for="form3Example1cg">
             <?php echo $field->field->name; ?>
       </label>
      </div>
-   <?php endif; ?>
-  <?php endforeach; ?>
+       <?php } ?>
+   <?php } ?>
   <div class="d-flex justify-content-center">
    <button
      type="submit"
@@ -88,7 +117,7 @@
   </div>
  </form>
  </div>
-<?php endforeach; ?>
+<?php } ?>
   </div>
  </div>
 </div>
@@ -250,7 +279,7 @@
      <form action="/profile/createWidget" method="get">  @csrf
        <div class="modal-body">
         <div id="product_fields_form" onsubmit="return handleFildForm(event)">
-          <input type="text" name="widget_name" value="" placeholder="Widget name">
+            <input type="text" name="widget_name" value="" placeholder="Widget name" required>
           <input type="hidden" name="field_group_id" value="0">
         </div>
       </div>
@@ -440,12 +469,8 @@
   }
 
 </script>
-   <!-- Optional JavaScript -->
-   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-   <script type="text/javascript">
+   
+<script type="text/javascript">
    //Ajax send request, only sends data to a file with GET
    function sendAjaxRequest(url,data) {
      const request = new XMLHttpRequest();
@@ -475,5 +500,4 @@
       request.send();
    }
    </script>
- </body>
-</html>
+@include('partials._footer')

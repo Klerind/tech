@@ -149,5 +149,4 @@
       request.send();
    }
    </script>
- </body>
-</html>
+@include('partials._footer')

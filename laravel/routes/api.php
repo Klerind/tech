@@ -25,4 +25,4 @@ Route::get('/requestApi',[ProductController::class, 'update']);
 
 Route::get('/edit/comment',[CommentController::class, 'update']); 
 
-Route::get('/edit/user',[UserController::class, 'update']); 
+Route::post('/edit/user',[UserController::class, 'update']); 

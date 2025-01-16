@@ -48,6 +48,10 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {  
+        $request->validate([
+        'comment' => 'required|string|max:255'
+        ]); 
+        
         $comment = $request->input(); 
         if (auth()->id() == null)
         {

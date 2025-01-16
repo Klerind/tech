@@ -22,11 +22,19 @@
 <div class="container">
  <div class="row">
   <div class="col-md-12">
+      
     <?php if (session()->get('status') != null): ?>
      <div class="alert alert-danger" role="alert">
        <?php echo session()->get('status'); ?>
      </div>
     <?php endif; ?>
+      
+      <?php if (session()->get('success') != null): ?>
+     <div class="alert alert-success" role="alert">
+       <?php echo session()->get('success'); ?>
+     </div>
+    <?php endif; ?>
+      
     @if(count($fields['field_group_post']) != 0)
       <p>Add a new post</p>
       <form action="/post/create" method="post">@csrf
@@ -37,6 +45,11 @@
          >
        @foreach($fields['field_group_post'] as $field)
         <div class="form-outline mb-4">
+             @error($field->field->name)
+                <div class="alert alert-danger" role="alert">
+                   {{ $message }}
+                </div>
+            @enderror
           <input type="{{$field->fieldType->type}}" class="form-control form-control-lg" name="{{$field->field_id}}" />
           <label class="form-label" for="form3Example1cg">{{$field->field->name}}</label>
         </div>
@@ -52,7 +65,10 @@
   <div class="article">
   <?php $first_key_from_posts_item = array_key_first($content); ?>
   <?php if ($content[$first_key_from_posts_item]->field_group === 2): ?>
-    <button type="button" class="btn btn-primary">Buy This Product</button>
+    <form action="/product/add" method="post">@csrf
+      <input type="hidden" name="content_link" value="<?php echo $key; ?>" />
+      <button type="submit" class="btn btn-primary">Add Product To Cart</button>
+    </form>
   <?php endif; ?>
   <?php foreach ($content as $item): ?>
     <div> 
@@ -88,14 +104,13 @@
     <?php endforeach; ?>
    </span>
    <form action="/comments/store" method="post">@csrf
-     @error('title')
-             {{ $title }}
-     @enderror
-     @error('description')
-             {{ $description }}
-     @enderror
      <input type="hidden" name="content_link" value="<?php echo $key; ?>" />
      <div class="form-outline mb-4">
+        @error('comment')
+          <div class="alert alert-danger" role="alert">
+           {{ $message }}
+          </div>
+        @enderror
        <input type="text" id="form3Example1cg" class="form-control form-control-lg" name="comment" placeholder="Be the first to add a comment" />
      </div>
      <div class="d-flex justify-content-center">
@@ -147,11 +162,7 @@
   }
 
 </script>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
 <script type="text/javascript">
 //Ajax send request, only sends data to a file with GET
 function sendAjaxRequest(url,data) {
@@ -182,5 +193,4 @@ function getSendAjaxRequest(url,data,getData) {
    request.send();
 }
 </script>
-</body>
-</html>
+@include('partials._footer')

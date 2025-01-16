@@ -1,10 +1,10 @@
-<?php 
+<?php  
 header('Access-Control-Allow-Origin: http://localhost:3000');
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request; 
 
 define('LARAVEL_START', microtime(true));
- 
+
 /*
 |--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance
@@ -15,7 +15,7 @@ define('LARAVEL_START', microtime(true));
 | instead of starting the framework, which could cause an exception.
 |
 */
-
+ 
 if (file_exists($maintenance = __DIR__.'/laravel/storage/framework/maintenance.php')) {
     require $maintenance;
 }
@@ -46,8 +46,9 @@ require __DIR__.'/laravel/vendor/autoload.php';
 
 $app = require_once __DIR__.'/laravel/bootstrap/app.php';
 
-$kernel = $app->make(Kernel::class);
- 
+$kernel = $app->make(Kernel::class); 
+
 $response = $kernel->handle(
     $request = Request::capture()
 )->send();
+  
