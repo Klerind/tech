@@ -10,11 +10,10 @@ use App\Http\Controllers\ContentController;
 class PostController extends Controller
 {
      public function create(Request $request)
-     {
-         $inputs = $request->input();
+     {     
          ContentController::create($request);
 
-         return redirect('/profile');
+         return redirect('/')->with('success', 'Post added!');
       }
 
       public function edit(Request $request)

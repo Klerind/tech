@@ -22,7 +22,7 @@ Route::middleware('guest')->get('/user', function (Request $request)
     return $request->user();
 });
 
-Route::post('/t', function (Request $request)
+Route::post('/', function (Request $request)
 {
    $request = $request->input();
    $user = RegisterController::create($request);
@@ -30,7 +30,7 @@ Route::post('/t', function (Request $request)
 });
 
 Route::post('/login', function (LoginRequest $request)
-{
+{ 
     $credentials = $request->validated();
 
 /*    $validatedData = $request->validateWithBag('post',

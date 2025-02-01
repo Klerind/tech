@@ -5,26 +5,66 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Content;
 use App\Models\User;
+use App\Models\FormField;
+use Illuminate\Support\Facades\Validator;
 
 class ContentController extends Controller
 {
   public static function create(Request $request)
   {
-    $inputs = $request->input();  
+    $inputs = $request->input();     
     if (!is_null($request->file('image')))
     {
       $imgOriginName = $request->file('image')->getClientOriginalName();
       $request->image->move(public_path(''), $imgOriginName);
       $inputs[28] = $imgOriginName;
     }
+    
     $field_group = $inputs['field_group'];
     unset($inputs['field_group']);
 
     if (isset($inputs['_token']))
     {
      unset($inputs['_token']);
+    } 
+     
+    $fields = FormField::whereIn('field_id', array_keys($inputs))->get();
+       
+    //dd($fields);
+     
+    //dd($inputs);
+    //FormField::where([
+    //    'field_id' => $inputs[0]$key
+    //]);
+    //$inputs['cmimi'] = null;
+    //dd(array_keys($inputs));
+     
+    foreach ($fields as $field)
+    {
+          $rules[$field->name] = 'required';
+          
+          foreach ($inputs as $key => $value)
+          {
+              if($field->field_id === $key)
+              {
+                  $new_inputs[$field->name] = $value;
+              }
+          }
     }
-
+       
+    $validator = Validator::make($new_inputs, $rules,[
+        'required' => 'The :attribute field is required.',
+    ], [
+    ]);
+         //dd($validator->fails());
+    if ($validator->fails()) 
+    {
+        //echo 'test';
+        //dd(9);
+        return redirect('/profile')
+                                ->withErrors($validator);
+     }  
+     
     $random_number = mt_rand(1, 1000);
 
     $check_if_content_link_exists = Content::where(
@@ -97,8 +137,14 @@ class ContentController extends Controller
   }
   
   public static function showArticle(Request $request)
-  {  
-    $content_link_id = $request->input()['content_link'];
+  {   
+    $content_link_id = intval($request->input()['content_link']); 
+    
+    if ($content_link_id <= 0) 
+    { 
+        return redirect('/')->with('status', 'You can not use that article id!');
+    }
+    
     $fields = $field_group_post = $field_group_product = [];
     $fields_content = Content::select('*')
         ->where(['content_link' => $content_link_id])
@@ -167,6 +213,10 @@ class ContentController extends Controller
 
   public function search(Request $request)
   {
+      $request->validate([
+          'search' => 'required'
+      ]);
+      
     $request = $request->input();
 
     $user = User::where(
@@ -198,7 +248,7 @@ class ContentController extends Controller
           )->get();
        }
      }
-//dd($all_contents);
+ 
      return view('pages/search', [
          'all_contents' => $all_contents
      ]);

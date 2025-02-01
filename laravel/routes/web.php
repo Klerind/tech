@@ -13,6 +13,7 @@ use App\Http\Controllers\WidgetController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Cookie;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +25,13 @@ use App\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-//dd(Auth::user());
-//Log::emergency('The system is down!');
-
+   
+  $minutes = 60 * 24 * 30;
+   
+  //Cookie::queue('cart_items', 'test', $minutes);
+   
+  //dd(request()->cookie('cart_items', '[]', true));
+  
   Route::get('/', [PagesController::class, 'getHome']);
 
   Route::get('/about', [PagesController::class, 'getAbout']);
@@ -46,7 +50,7 @@ use App\Http\Controllers\UserController;
 
   Route::get('/profile', [PagesController::class, 'getProfilePage']);
 
-  Route::get('/test', [TestController::class, 'show']);
+  Route::get('/test', [TestController::class, 'show'])->name('test');
 
   Route::get('/test/result', [TestController::class, 'add']);
 
@@ -63,21 +67,29 @@ use App\Http\Controllers\UserController;
   Route::get('/profile/deleteWidget', [WidgetController::class, 'delete']);
 
   Route::get('/post/delete', [PostController::class, 'delete']);
-  
+
   Route::get('/show_user', [UserController::class, 'show']);
-  
+
   Route::get('/article', [ContentController::class, 'showArticle']);
 
   Route::post('/post/create', [PostController::class, 'create']);
 
   Route::post('/comments/create', [CommentController::class, 'create']);
-   
+
   Route::post('/comments/store', [CommentController::class, 'store']);
 
   Route::post('/product/create', [ProductController::class, 'create']);
+  
+  Route::post('/product/add', [ProductController::class, 'add']);
+  
+  Route::post('/product/buy', [ProductController::class, 'buy']);
+  
+  Route::get('/product/success', [ProductController::class, 'success'])->name('product.success');
+  
+  Route::get('/product/cancel', [ProductController::class, 'cancel'])->name('product.cancel');
 
   Route::post('/contact/sendMail', [MailController::class, 'send']);
 
   Route::post('/search', [ContentController::class, 'search']);
- 
+  
 require 'auth.php';

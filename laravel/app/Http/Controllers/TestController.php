@@ -11,7 +11,7 @@ class TestController extends Controller
 {
 
   public function show(Request $request)
-  {
+  { dd(9);
     $questions = Questions::all()->random(9);
 
     $new_format_of_questions = [];

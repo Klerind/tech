@@ -11,8 +11,8 @@ use App\Models\UserStatus;
 use App\Models\UserRole;
 use App\Models\Address;
 use App\Models\UserDescription;
-use App\Models\LikedAccounts;
-use App\Models\Language; 
+use App\Models\UserLikedAccounts;
+use App\Models\UserLanguages; 
 use App\Models\Content; 
 
 class User extends Authenticatable
@@ -49,15 +49,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public function role()
-    {
-      return $this->hasMany(UserRole::class, 'user_id', 'id');
-    }
-    
-    public function status()
-    {
-      return $this->hasMany(UserStatus::class, 'user_id', 'id');
-    }
     
     public function address()
     {
@@ -69,14 +60,24 @@ class User extends Authenticatable
       return $this->belongsTo(UserDescription::class, 'id', 'user_id');
     }
     
-    public function linkedAccount()
+    public function roles()
     {
-      return $this->hasMany(LikedAccounts::class, 'user_id', 'id');
+      return $this->hasMany(UserRole::class, 'user_id', 'id');
     }
     
-    public function language()
+    public function status()
     {
-      return $this->hasMany(Language::class, 'user_id', 'id');
+      return $this->hasMany(UserStatus::class, 'user_id', 'id');
+    }
+     
+    public function linkedAccounts()
+    {
+      return $this->hasMany(UserLikedAccounts::class, 'user_id', 'id');
+    }
+    
+    public function languages()
+    {
+      return $this->hasMany(UserLanguages::class, 'user_id', 'id');
     }
     
     public function contents()

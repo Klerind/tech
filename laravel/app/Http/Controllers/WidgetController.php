@@ -38,7 +38,7 @@ class WidgetController extends Controller
         }
       }
 
-      return redirect('/profile');
+      return redirect('/profile')->with('status', 'Your widget was created. Add fields for  created widgit by clicking the button below.');  
   }
 
   public static function show()

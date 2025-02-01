@@ -49,8 +49,8 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
+    protected static function validator(array $data)
+    {  
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -66,6 +66,7 @@ class RegisterController extends Controller
      */
     public static function create(array $data)
     {  
+        //$data->validated();
     /*  $user = new User();
 
       $user->forceFill([
@@ -78,6 +79,10 @@ class RegisterController extends Controller
 
       event(new PasswordReset($user));
 */
+      $validator = self::validator($data);
+        
+      $validator->validate();
+        
       return User::create([
                            'name' => $data['name'],
                            'email' => $data['email'],
